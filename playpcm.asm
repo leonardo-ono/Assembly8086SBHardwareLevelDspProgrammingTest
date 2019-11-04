@@ -1,3 +1,15 @@
+; Play PCM sound through Sound Blaster using Direct Mode
+; Written by Leonardo Ono (ono.leo@gmail.com)
+;
+; This is the original code of https://youtu.be/cQwG7DiqK80 video
+;
+; 11/03/2019 this code works fine in DOSBox, however i 
+;            finally could buy a real Sound Blaster 16 
+;            and this code didn't work in this real
+;            sound card. I'll leave this code unchanged 
+;            and i added a fixed version as playpcm2.asm
+;            that now works in both DOSBox and real
+;            machine :) 
 	bits 16
 	org 100h
 

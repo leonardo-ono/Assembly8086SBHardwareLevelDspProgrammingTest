@@ -1,4 +1,3 @@
-; Sound Blaster 
 ; Sound Blaster
 ; Hardware level DSP programming
 ; Play a PCM sound using 'Direct Mode'
@@ -8,6 +7,13 @@
 ;
 ; use: nasm playpc~1.asm -o playpc~1.obj -f obj
 ;      tlink playpc~1.obj, playpc~1.exe
+;
+; 11/03/2019 - fixed to work in both DOSBox and real
+;              machine with real SB16 sound card.
+;
+; References:
+; SB16 card jumpers - https://stason.org/TULARC/pc/sound-cards-multimedia/CREATIVE-LABS-INC-Sound-card-SOUNDBLASTER-16-VALUE-6.html
+; http://archive.gamedev.net/archive/reference/articles/article443.html see "02x0Ch     DSP - Write Data or Command"
 
 	bits 16
 
@@ -110,7 +116,7 @@ segment sb
 			mov al, 1
 			out dx, al
 			
-			mov cx, 0
+			mov cx, 50
 		.wait_a_little:
 			nop
 			loop .wait_a_little
@@ -141,23 +147,13 @@ segment sb
 		.end:	
 			retf
 
-	sb_read_dsp:
-			mov dx, 22eh
-		.busy:
-			in al, dx
-			or al, al
-			jns .busy
-			mov dx, 22ah
-			in al, dx
-			retf
-			
 	; bl = send byte data
 	sb_write_dsp:
 			mov dx, 22ch
 		.busy:
 			in al, dx
-			or al, al
-			jns .busy
+			test al, 10000000b
+			jnz .busy
 			mov al, bl
 			out dx, al
 			retf
